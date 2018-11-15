@@ -1,0 +1,237 @@
+1.EtherChannel: On
+2.Trunk: 802.1Q; On; disable DTP
+3.VTP:
+-Domain:SERVER
+-Password:vtp@123
+4.VLAN:
+-VLAN 254: WEB; 10.0.254.0/24
+-VLAN 253: DHCP; 10.0.253.0/24
+-VLAN 99: MANAGEMENT; 10.0.99.0/24
+5.Fine-Tuning:
+-Native VLAN:99
+-VTP mode: Transparent
+6.RSTP
+-MLS2: Root of VLAN 254
+-MLS3: Root of VLAN 253
+7.Inter-VLAN Routing: SVI
+
+
+
+## Config Port channel
+
+MLS1
+
+int range g1/0/3-4
+   shutdown
+   channel-group 1 mode on
+
+int port-channel 1
+   switchport trunk encapsulation dot1q
+   switch mode trunk
+   switchport nonegotiate
+
+
+
+
+int range g1/0/6-7
+   shutdown
+   channel-group 2 mode on
+
+int port-channel 2
+   switchport trunk encapsulation dot1q
+   switch mode trunk
+   switchport nonegotiate
+
+
+int range g1/0/3-4
+no shutdown
+
+
+int range g1/0/6-7
+no shutdown
+
+
+show etherchannel summary
+show etherchannel port-channel
+show interface trunk
+
+=======================
+=======================
+
+MLS2
+
+conf t
+
+int range g1/0/1-2
+   shutdown
+   channel-group 1 mode on
+
+int port-channel 1
+   switchport trunk encapsulation dot1q
+   switch mode trunk
+   switchport nonegotiate
+
+int range g1/0/3-4
+   shutdown
+   channel-group 3 mode on
+
+int port-channel 3
+   switchport trunk encapsulation dot1q
+   switch mode trunk
+   switchport nonegotiate
+
+
+int range g1/0/1-2
+no shutdown
+
+
+int range g1/0/3-4
+no shutdown
+
+
+end 
+
+show etherchannel summary
+show etherchannel port-channel
+show interface trunk
+
+
+=======================
+=======================
+
+MLS3
+
+int range g1/0/1-2
+   shutdown
+   channel-group 2 mode on
+
+int port-channel 2
+   switchport trunk encapsulation dot1q
+   switch mode trunk
+   switchport nonegotiate
+
+
+
+
+int range g1/0/3-4
+   shutdown
+   channel-group 3 mode on
+
+int port-channel 3
+   switchport trunk encapsulation dot1q
+   switch mode trunk
+   switchport nonegotiate
+
+
+int range g1/0/1-2
+no shutdown
+
+
+int range g1/0/3-4
+no shutdown
+
+
+## Config VTP
+
+
+VTP mode:
+
+- Server
+- Client 
+- Transparent
+
+Cac switch client cap nhat theo ban tin co revision number lon nhat
+
+### Command
+
+MLS1, MLS2, MLS3
+
+conf t
+
+vtp domain SERVER
+
+vtp mode server
+vtp password vtp@123
+vtp version 2
+
+show vtp status
+show vtp password
+
+MLS1
+
+vlan 254
+name web
+
+vlan 253
+name dhcp
+
+vlan 99
+name management
+
+## Native VLAN
+
+### Native vlan 192: cac goi tin vlan 192 di qua trunking khong gan the
+
+
+MLS1
+
+### Native vlan
+
+interface port-channel 1
+switchport trunk native vlan 99
+
+interface port-channel 2
+switchport trunk native vlan 99
+
+vtp mode transparent
+
+MLS2
+
+## Native vlan
+
+interface port-channel 1
+switchport trunk native vlan 99
+
+interface port-channel 3
+switchport trunk native vlan 99
+
+vtp mode transparent
+
+
+MLS3
+
+## Native vlan
+
+interface port-channel 2
+switchport trunk native vlan 99
+
+interface port-channel 3
+switchport trunk native vlan 99
+
+vtp mode transparent
+
+
+
+### STP - Spanning Tree Protocol
+
+6.RSTP
+-MLS2: Root of VLAN 254
+-MLS3: Root of VLAN 253
+
+Giao thuc su dung de tranh loop.
+
+Root ID: ID cua Root bridge
+Bridge ID: ID cuar bridge hien tai
+
+MLS2:
+
+spanning-tree vlan 254 priority 0
+
+show spanning-tree vlan 254
+
+
+MLS3:
+
+spanning-tree vlan 253 priority 0
+
+show spanning-tree vlan 253
