@@ -235,3 +235,14 @@ MLS3:
 spanning-tree vlan 253 priority 0
 
 show spanning-tree vlan 253
+
+7.Inter-VLAN Routing: SVI
+
+MLS1
+
+MLS1(config-if)#int vlan 254
+MLS1(config-if)#ip address 10.0.254.254 255.255.255.0
+MLS1(config-if)#no shutdown
+MLS1(config-if)#int vlan 253
+MLS1(config-if)#ip address 10.0.253.254 255.255.255.0
+MLS1(config-if)#no shutdown
