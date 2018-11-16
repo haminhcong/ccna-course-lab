@@ -1,0 +1,71 @@
+## IP v6:
+
+Các v?n d? c?a IP V4:
+
+- Thi?u h?t IP public
+- B?ng d?nh tuy?n quá l?n
+- B?o m?t 
+- Header ph?c t?p
+- Không có mô hình d?nh tuy?n end to end
+
+Ip v6: 128 bit address
+
+### IPv6 command
+
+## R1
+
+R1>enable
+R1#conf t
+R1(config)#ipv6 unicast-routing 
+R1(config)#interface gigabitEthernet 0/0
+R1(config-if)#ipv6 address 2001:123:1::1/64
+R1#show ipv6 interface brief 
+GigabitEthernet0/0         [up/up]
+    FE80::204:9AFF:FE6E:2A01
+    2001:123:1::1
+GigabitEthernet0/1         [administratively down/down]
+Serial0/0/0                [up/up]
+Serial0/0/1                [up/up]
+Vlan1                      [administratively down/down]
+
+
+
+FE80::204:9AFF:FE6E:2A01: IPv6 link local, chi co tac dung tren tung duong ket noi
+
+R1#ping FE80::260:47FF:FE4B:8B0C
+Output Interface: GigabitEthernet0/0
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to FE80::260:47FF:FE4B:8B0C, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 0/0/1 ms
+
+IP Link Local luon bat dau voi chuoi FE80
+Co che tu sinh IP link local o? router cung nhu o? cac thiet bi nhu may tinh: EUI-64 - su dung dia chi MAC de sinh ra IP link local
+
+
+
+
+Vi du: 
+
+- IP link local cua may tinh: FE80::260:47FF:FE4B:8B0C
+- IP link local cua router tai port G0/0: FE80::204:9AFF:FE6E:2A01 - MAC cua interface g0/0: Hardware is CN Gigabit Ethernet, address is 0004.9a6e.2a01 
+
+
+Gan IPv6 Link Local bang tay, thay vi tu sinh ra:
+
+- Co the gan cung 1 IP link local cho nhieu interface cho router ma khong so bi trung lap, do IP link local chi co tac dung tren 1 duong ket noi
+
+
+# R1
+
+int s0/0
+iv6 address fe80::1 link-local
+int s0/1
+iv6 address fe80::1 link-local
+int g0/1
+iv6 address fe80::1 link-local
+
+
+## IpV6 Autoconfig
+
+Tu dong sinh IPV6 dua tren ICMP
