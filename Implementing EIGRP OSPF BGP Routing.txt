@@ -1,0 +1,119 @@
+EIGRP OSPF BGP
+
+1. OSPF
+
+- Mot ban tin OSPF tu Router R1 -> Router R2 co cac noi dung sau
+- link-state information:
+  - ip address/subnet mask of interfaces
+  - type of network
+  - cost of interface
+  - list of neighbors
+
+- Khi su dung OSPF, cac router duy tri mot ban do ve tat ca cac node mang (router) tren toan bo he thong
+- LSA: Link-State Advertisement- Co 11 loai ban tin
+- Thuat toan su dung: Dijstra (SPF)
+- Loai giao thuc: Link state
+- Metric: Bandwitdth (bps)
+- Databases 3 tables:
+  - Neighbors
+  - Topology (Link-state database)
+  - Routing
+- Desgin:
+  - Single area
+  - multi area
+
+## Config OSPF
+
+R7:
+
+router ospf 1
+router-id 7.7.7.7
+network 10.0.78.0 0.0.0.255 area 0
+network 10.0.127.0 0.0.0.255 area 0
+
+
+R8:
+
+router ospf 1
+router-id 8.8.8.8
+network 10.0.78.0 0.0.0.255 area 0
+network 10.0.118.0 0.0.0.255 area 118
+
+
+
+R12:
+
+router ospf 1
+router-id 12.12.12.12
+network 10.0.127.0 0.0.0.255 area 0
+network 10.0.132.0 0.0.0.255 area 136
+
+
+R13:
+
+router ospf 1
+router-id 13.13.13.13
+network 100.0.13.0 0.0.0.255 area 136
+network 10.0.132.0 0.0.0.255 area 136
+
+
+R9:
+
+router ospf 1
+router-id 9.9.9.9
+network 100.0.9.0 0.0.0.255 area 118
+network 10.0.118.0 0.0.0.255 area 118
+
+
+
+R10:
+
+router ospf 1
+router-id 10.10.10.10
+network 100.0.10.0 0.0.0.255 area 118
+network 10.0.118.0 0.0.0.255 area 118
+
+
+R11: 
+
+router ospf 1
+router-id 11.11.11.11
+network 100.0.11.0 0.0.0.255 area 118
+network 10.0.118.0 0.0.0.255 area 118
+
+## check result
+
+show ip ospf neighbor
+show ip ospf database
+show ip route
+show ip protocols
+
+
+Tren R7 xay dung default route 
+##
+
+ip route 0.0.0.0 0.0.0.0 s0/0/0
+router ospf 1
+default-information originate
+
+## De huy cau hinh process cua ospf tren 1 router
+no router ospf 1
+
+
+## Cau hinh toi uu 
+R9
+
+router ospf 1
+
+passive-interface g0/1
+
+## Election trong OSPF
+
+Bau chon ra 1 router leader trong mien quang ba, tat ca cac thong tin routing duoc cac router gui cho router leader, sau do leader router se gui thong tin nay den cac router con lai. 
+
+Viec leader election cho phep thong tin dinh tuyen khong bi trung lap
+
+## command
+
+show ip ospf interface 
+
