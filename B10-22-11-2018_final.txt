@@ -1,0 +1,127 @@
+------------SUBNETING-----------------
+BRANCH
+interface Serial0/0/0
+ip address 2.2.2.97 255.255.255.252
+interface Serial0/0/1
+ip address 2.2.2.101 255.255.255.252
+
+GATE1
+
+interface Serial0/0/0 
+ip address 2.2.2.98 255.255.255.252
+interface GigabitEthernet0/0
+ip address 2.2.2.1 255.255.255.192
+interface GigabitEthernet0/1
+ip address 2.2.2.65 255.255.255.224
+
+GATE2
+
+interface Serial0/0/0 
+ip address 2.2.2.102 255.255.255.252
+interface GigabitEthernet0/0
+ip address 2.2.2.2 255.255.255.192
+interface GigabitEthernet0/1
+ip address 2.2.2.66 255.255.255.224
+
+WEB SERVER
+2.2.2.4
+255.255.255.192
+
+FTP SERVER
+2.2.2.5
+255.255.255.192
+--------------SWITCHING---------------------
+1. Ethernet channel
+BR-SW1
+enable
+conf t
+int range f0/1-2
+channel-group 1 mode on
+BR-SW2
+enable
+conf t
+int range f0/1-2
+channel-group 1 mode on
+
+--check
+show etherchannel summary
+show etherchannel port-channel
+
+--------------TRUNKING---------------------
+2. Trunking (MLS, ALS1, ALS2) : Mode ON, disable DTP
+
+--SW MLS
+int range f0/2-3
+switchport trunk encapsulation dot1q 
+switchport mode trunk
+switchport nonegotiate
+
+--SW ALS1
+int range f0/1-2
+switchport mode trunk
+switchport nonegotiate
+
+--SW ALS2
+int range f0/1-2
+switchport mode trunk
+switchport nonegotiate
+
+--Verify
+
+show interface trunk
+
+--------------VTP---------------------
+
+--SW MLS
+vtp domain VINSYS
+vtp version 2
+vtp password vinsys@123
+
+--SW ALS1
+vtp password vinsys@123
+
+--SW ALS2
+vtp password vinsys@123
+
+show vtp status
+
+--------------CREATE-VLAN---------------------
+--SW MLS
+VLAN 192
+  name SALE
+VLAN 172
+  name TECH
+VLAN 99
+  name MANAGEMENT
+
+int vlan 99
+no shutdown
+ip address 10.0.99.254 255.255.255.0
+
+--SW ALS1
+
+int fa0/3
+switchport mode access
+switchport access vlan 172
+
+int fa0/4
+switchport mode access
+switchport access vlan 192
+
+int vlan 99
+no shutdown
+ip address 10.0.99.1 255.255.255.0
+
+--SW ALS2
+
+int fa0/3
+switchport mode access
+switchport access vlan 172
+
+int fa0/4
+switchport mode access
+switchport access vlan 192
+
+int vlan 99
+no shutdown
+ip address 10.0.99.2 255.255.255.0
