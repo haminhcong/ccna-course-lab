@@ -1,0 +1,8 @@
+- BGP ho tro quan tri thong tin dinh tuyen toan cau voi so luong hang tram nghin route
+- cac loai BGP: 
+  - iBGP
+  - eBGP
+
+- Hai loai BGP nay co cach thuc hoat dong giong nhau, tuy nhien bo thuoc tinh su dung cua eBGP se khac iBGP
+- OSPF chi hoat dong giua cac router duoc dau noi truc tiep voi nhau, con BGP co the chay tren cac router khong dau noi truc tiep voi nhau.
+- 
