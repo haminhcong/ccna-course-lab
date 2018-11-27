@@ -85,7 +85,7 @@ vtp password vinsys@123
 
 show vtp status
 
---------------CREATE-VLAN---------------------
+--------------CREATE-VLAN-ASSIGN-IP-ADDRESS---------------------
 --SW MLS
 VLAN 192
   name SALE
@@ -125,3 +125,61 @@ switchport access vlan 192
 int vlan 99
 no shutdown
 ip address 10.0.99.2 255.255.255.0
+
+----------FINE-TUNNING---------------
+## MLS>
+MLS>enable
+MLS#conf t
+MLS(config)#int range f0/2-3
+MLS(config-if-range)#switchport trunk native vlan 99
+MLS(config-if-range)#
+
+show interfaces trunk 
+
+## ALS 1,2
+ALS1#conf t
+ALS1(config)#int range f0/1-2
+ALS1(config-if-range)#switchport trunk native vlan 99
+show interfaces trunk 
+
+
+ALS2#conf t
+ALS2(config)#int range f0/1-2
+ALS2(config-if-range)#switchport trunk native vlan 99
+show interfaces trunk 
+
+
+## MLS, ALS1, ALS2
+conf t
+vtp mode transparent
+
+-------STP-----------
+
+## MLS
+
+conf t
+
+spanning-tree vlan 99,172,192 priority 0
+
+show spanning-tree
+
+------------Inter VLAN Routing------------------
+
+## MLS
+
+conf t
+ip routing #!IMPORTANT
+int vlan 172
+no shutdown
+ip address 10.0.172.254 255.255.255.0
+
+int vlan 192
+no shutdown
+ip address 10.0.192.254 255.255.255.0
+
+int vlan 99
+no shutdown
+ip address 10.0.99.254 255.255.255.0
+
+show ip interface brief
+show ip route
