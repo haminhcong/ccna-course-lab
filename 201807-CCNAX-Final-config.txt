@@ -1,3 +1,5 @@
+I.II SUBNETTING & SWITCHING
+
 ------------SUBNETING-----------------
 BRANCH
 interface Serial0/0/0
@@ -168,7 +170,9 @@ show spanning-tree
 ## MLS
 
 conf t
+
 ip routing #!IMPORTANT
+
 int vlan 172
 no shutdown
 ip address 10.0.172.254 255.255.255.0
@@ -183,3 +187,9 @@ ip address 10.0.99.254 255.255.255.0
 
 show ip interface brief
 show ip route
+
+
+III. ROUTING
+
+-------------------eBGP---------------------
+
