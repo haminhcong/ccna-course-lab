@@ -192,4 +192,9 @@ show ip route
 III. ROUTING
 
 -------------------eBGP---------------------
+trong cau lenh cau hinh bgp: 
 
+- neighbor: xac dinh cac hang xong cua router dang cau hinh.
+- network: xac dinh cac network ma router dang cau hinh se quang ba cho cac router neighbor
+- redistribute static: cho phep router dang cau hinh quang ba cac route static cho cac router neighbor (ben canh cac network da khai bao trong cau lenh network)
+--------------------------------------------
