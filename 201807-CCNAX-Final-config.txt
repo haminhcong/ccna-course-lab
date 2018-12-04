@@ -197,4 +197,28 @@ trong cau lenh cau hinh bgp:
 - neighbor: xac dinh cac hang xong cua router dang cau hinh.
 - network: xac dinh cac network ma router dang cau hinh se quang ba cho cac router neighbor
 - redistribute static: cho phep router dang cau hinh quang ba cac route static cho cac router neighbor (ben canh cac network da khai bao trong cau lenh network)
---------------------------------------------
+
+-------------------OSPF---------------------
+
+- Neu port noi voi router la port layer 3: Su dung passive interface g0/1
+- Neu port noi voi router la port layer 2 (trong truong hop router cau hinh la multi layer switch): Su dung passive interface Vlan 172, 192
+
+https://lpmazariegos.com/2016/01/21/ospf-passive-interface/
+
+## HQ
+
+passive interface g0/1
+
+## MLS
+
+ip routing: bat chuc nang routing tren MLS switch
+- passive cac interface VLAN: passive vao cac cong VLAN de ngan ban tin ospf gui qua cac vlan 172 va 192
+
+passive interface Vlan 172
+passive interface Vlan 192
+
+-------------------EIGRP---------------------
+
+- cau lenh: network 2.0.0.0 co 2 chuc nang:
+  - Xac dinh cac interface nao duoc active de trao doi goi tin (cac interface co IP address thuoc mang duoc khai bao tren network thi duoc phep truyen/nhan ban tin eigrp. Vi du router BRANCH co 2 interface thuoc mang 2.2.2.0/25 thi 2 interface nay se truyen nhan goi tin eigrp, con interface con lai noi voi router ISP2 se khong tham gia truyen nhan goi tin cua giao thuc eigrp.
+  - Xac dinh cac mang dau noi truc tiep duoc dong goi de truyen di
