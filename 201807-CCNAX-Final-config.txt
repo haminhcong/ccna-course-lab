@@ -218,10 +218,10 @@ passive interface Vlan 172
 passive interface Vlan 192
 
 -------------------EIGRP---------------------
-
+- no auto-summary: Disable auto summary
 - cau lenh: network 2.0.0.0 co 2 chuc nang:
   - Xac dinh cac interface nao duoc active de trao doi goi tin (cac interface co IP address thuoc mang duoc khai bao tren network thi duoc phep truyen/nhan ban tin eigrp. Vi du router BRANCH co 2 interface thuoc mang 2.2.2.0/25 thi 2 interface nay se truyen nhan goi tin eigrp, con interface con lai noi voi router ISP2 se khong tham gia truyen nhan goi tin cua giao thuc eigrp.
-  - Xac dinh cac mang dau noi truc tiep duoc dong goi de truyen di
+  - Xac dinh cac mang dau noi truc tiep duoc dong goi de truyen di.
   
 ## GATE2
 enable
