@@ -246,3 +246,35 @@ router eigrp 1
   network 2.0.0.0
   redistributed static
   no auto-summary
+  
+  -------------------IV. HA---------------------
+  GATE1
+  
+  int g0/0
+    standby 60 ip 2.2.2.3
+    standby 60 priority 255
+    standby 60 preempt
+    standby 60 track s0/0/0
+  
+  GATE2
+  int g0/0
+    standby 60 ip 2.2.2.3
+    standby 60 priority 254
+    standby 60 preempt
+    standby 60 track s0/0/0
+    
+ show stanby
+ show standby brief
+ 
+ ------------V. SERVICE-------------------
+ 
+ 1. DHCP - Qua trinh cap phat IP
+  - PC gui goi tin DHCP discovery service voi IP dich: 255.255.255.255
+  - DHCP gui ban tin OFFER cho PC voi 1 IP
+  - PC gui ban tin chua IP ma DHCP gui cho toi cac may khac trong mang 
+  thong qua ban tin co dst IP 255.255.255.255 de dam bao khong co may nao trong mang
+  co IP nay.
+  - Neu khong co may nao trong mang so huu IP nay, PC su dung IP nay de lam IP cho chinh no
+  2. DHCP: Qua trinh cap phat ip neu DHCP server nam khac mang voi PC can cap phat:
+  ![Image of DHCP](https://lh6.googleusercontent.com/TdFv6hDlNzsjl92LALZlxmkZ3FVT1qURviyMt-M-o_ZlplO9AcvUE5oOaDNmdI74ArOLgleQzdZsOA=w710-h740-rw)
+
