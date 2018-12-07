@@ -307,7 +307,25 @@ Luu y: Cau hinh ip cho int vlan 192 va vlan 172: 10.0.192.254/24 va 10.0.172.254
 ### 2. Cau hinh NAT/PAT
 
 
+### 3. Cau hinh Tunnel GRE
+
+Voi cau hinh nhu sau:
+
+(gre config)[https://lh4.googleusercontent.com/_24HJ97lOHvNmg4Znqx8JGf-y3UisXDWyjK64NbkCF1PkOptHy57ame3CvmU79JwA5axrtNQPmNczQ=w1440-h740-rw)
 
 
+Thi tren 2 router HQ va BRANCH tao ra 2 interface ao Tunnel 0, noi voi nhau thong qua mang tunnel nhu dau noi truc tiep la mang 172.16.1.0/25. Sau khi cau hinh nhu the nay, thi co the coi HQ va BRANCH dang dau noi truc tiep voi nhau thong qua 2 interface Tunnel 0 o 2 router.
 
+Sau khi cau hinh tunnel, can them cac route tinh vao cac router HQ vao branch:
 
+```conf
+---HQ
+ip route 2.2.2.0 255.255.255.128 172.16.1.2
+
+---BRANCH
+ip route 10.0.0.0 255.0.0.0 172.16.1.1
+```
+
+De cac goi tin tu mang 10.0.0.0/8 di duoc vao mang 2.2.2.0/25 va nguoc lai theo
+cac route tinh, vi 2 mang nay deu la mang noi bo nen neu khong co GRE + routing thi 
+se khong the van chuyen duoc trenmang public
