@@ -311,7 +311,7 @@ Luu y: Cau hinh ip cho int vlan 192 va vlan 172: 10.0.192.254/24 va 10.0.172.254
 
 Voi cau hinh nhu sau:
 
-(gre config)[https://lh4.googleusercontent.com/_24HJ97lOHvNmg4Znqx8JGf-y3UisXDWyjK64NbkCF1PkOptHy57ame3CvmU79JwA5axrtNQPmNczQ=w1440-h740-rw)
+(gre config)[https://lh4.googleusercontent.com/_24HJ97lOHvNmg4Znqx8JGf-y3UisXDWyjK64NbkCF1PkOptHy57ame3CvmU79JwA5axrtNQPmNczQ=w1440-h740-rw]
 
 
 Thi tren 2 router HQ va BRANCH tao ra 2 interface ao Tunnel 0, noi voi nhau thong qua mang tunnel nhu dau noi truc tiep la mang 172.16.1.0/25. Sau khi cau hinh nhu the nay, thi co the coi HQ va BRANCH dang dau noi truc tiep voi nhau thong qua 2 interface Tunnel 0 o 2 router.
