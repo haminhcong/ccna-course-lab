@@ -2,6 +2,7 @@
 
 ### SUBNETING
 
+```
 BRANCH
 interface Serial0/0/0
 ip address 2.2.2.97 255.255.255.252
@@ -33,8 +34,11 @@ WEB SERVER
 FTP SERVER
 2.2.2.5
 255.255.255.192
+```
 
 ### SWITCHING
+
+```
 1. Ethernet channel
 BRSW1
 enable
@@ -50,11 +54,15 @@ channelgroup 1 mode on
 check
 show etherchannel summary
 show etherchannel portchannel
+```
 
 ### TRUNKING
+
 2. Trunking (MLS, ALS1, ALS2) : Mode ON, disable DTP
 
+```
 SW MLS
+
 int range f0/23
 switchport trunk encapsulation dot1q 
 switchport mode trunk
@@ -88,9 +96,11 @@ SW ALS2
 vtp password vinsys@123
 
 show vtp status
+```
 
-### CREATEVLANASSIGNIPADDRESS
+### CREATE VLAN ASSIGN IP ADDRESS
 
+```
 SW MLS
 VLAN 192
   name SALE
@@ -130,10 +140,12 @@ switchport access vlan 192
 int vlan 99
 no shutdown
 ip address 10.0.99.2 255.255.255.0
+```
 
 ### FINETUNNING
 
- MLS>
+```
+MLS>
 MLS>enable
 MLS#conf t
 MLS(config)#int range f0/23
@@ -142,7 +154,7 @@ MLS(configifrange)#
 
 show interfaces trunk 
 
- ALS 1,2
+ALS 1,2
 ALS1#conf t
 ALS1(config)#int range f0/12
 ALS1(configifrange)#switchport trunk native vlan 99
@@ -155,23 +167,27 @@ ALS2(configifrange)#switchport trunk native vlan 99
 show interfaces trunk 
 
 
- MLS, ALS1, ALS2
+## MLS, ALS1, ALS2
 conf t
 vtp mode transparent
+```
 
 ### STP
 
- MLS
+```
+## MLS
 
 conf t
 
 spanningtree vlan 99,172,192 priority 0
 
 show spanningtree
+```
 
 ### Inter VLAN Routing
 
- MLS
+```
+## MLS
 
 conf t
 
@@ -191,7 +207,7 @@ ip address 10.0.99.254 255.255.255.0
 
 show ip interface brief
 show ip route
-
+```
 
 ## III. ROUTING
 
@@ -202,32 +218,114 @@ trong cau lenh cau hinh bgp:
  network: xac dinh cac network ma router dang cau hinh se quang ba cho cac router neighbor
  redistribute static: cho phep router dang cau hinh quang ba cac route static cho cac router neighbor (ben canh cac network da khai bao trong cau lenh network)
 
+###  eBGP
+
+#### ISP1
+
+```
+conf t
+
+ip route 4.4.4.0 255.255.255.248 1.1.1.2
+
+router bgp 65001
+neighbor 3.3.12.2 remote-as 65002
+neighbor 3.3.13.2 remote-as 65003
+redistributed static
+network 1.1.1.0 mask 255.25.255.252
+```
+
+
+#### ISP2
+
+```
+conf t
+
+ip route 2.2.2.0 255.255.255.128 1.1.1.6
+ 
+router bgp 65002
+neighbor 3.3.12.1 remote-as 65001
+neighbor 3.3.23.2 remote-as 65003
+redistributed static
+network 1.1.1.4 mask 255.25.255.252
+```
+
+#### ISP3
+
+```
+conf t
+router bgp 65003
+neighbor 3.3.13.1 remote-as 65001
+neighbor 3.3.23.1 remote-as 65002
+network 8.8.8.0 mask 255.255.255.0
+```
+
+#### verify 
+
+```
+show ip bgp
+show ip bgp summary
+show ip bgp neighbor
+show ip route bgp
+```
+
 ### OSPF
 
- Neu port noi voi router la port layer 3: Su dung passive interface g0/1
- Neu port noi voi router la port layer 2 (trong truong hop router cau hinh la multi layer switch): Su dung passive interface Vlan 172, 192
+ - Neu port noi voi router la port layer 3: Su dung passive interface g0/1
+ - Neu port noi voi router la port layer 2 (trong truong hop router cau hinh la multi layer switch): Su dung passive interface Vlan 172, 192
 
 https://lpmazariegos.com/2016/01/21/ospfpassiveinterface/
 
- HQ
+- ip routing: bat chuc nang routing tren MLS switch
+- passive cac interface VLAN: passive vao cac cong VLAN de ngan ban tin ospf gui qua cac vlan 172 va 192
 
-passive interface g0/1
-
- MLS
-
-ip routing: bat chuc nang routing tren MLS switch
- passive cac interface VLAN: passive vao cac cong VLAN de ngan ban tin ospf gui qua cac vlan 172 va 192
-
+```
 passive interface Vlan 172
 passive interface Vlan 192
+```
+
+#### HQ
+
+```
+conf t
+ip route 0.0.0.0 0.0.0.0 1.1.1.1
+router ospf 1
+router-id 1.1.1.1
+network 10.0.1.0 0.0.0.255 area 0
+network 10.0.0.0 0.0.0.255 area 0
+default-information originate
+passive-interface g0/1
+
+int vlan 1
+  ip oppf priority 255
+```
+
+#### MLS
+
+```
+conf t
+router ospf 1
+router-id 2.2.2.2
+network 10.0.1.0 0.0.0.255 area 0
+network 10.0.172.0 0.0.0.255 area 0
+newwork 10.0.192.0 0.0.0.255 area 0
+```
+
+#### verify 
+
+```
+show ip route ospf
+```
+
 
 ### EIGRP
- no autosummary: Disable auto summary
- cau lenh: network 2.0.0.0 co 2 chuc nang:
-   Xac dinh cac interface nao duoc active de trao doi goi tin (cac interface co IP address thuoc mang duoc khai bao tren network thi duoc phep truyen/nhan ban tin eigrp. Vi du router BRANCH co 2 interface thuoc mang 2.2.2.0/25 thi 2 interface nay se truyen nhan goi tin eigrp, con interface con lai noi voi router ISP2 se khong tham gia truyen nhan goi tin cua giao thuc eigrp.
-   Xac dinh cac mang dau noi truc tiep duoc dong goi de truyen di.
-  
- GATE2
+
+- no autosummary: Disable auto summary
+- cau lenh: network 2.0.0.0 co 2 chuc nang:
+  - Xac dinh cac interface nao duoc active de trao doi goi tin (cac interface co IP address thuoc mang duoc khai bao tren network thi duoc phep truyen/nhan ban tin eigrp. Vi du router BRANCH co 2 interface thuoc mang 2.2.2.0/25 thi 2 interface nay se truyen nhan goi tin eigrp, con interface con lai noi voi router ISP2 se khong tham gia truyen nhan goi tin cua giao thuc eigrp.
+  - Xac dinh cac mang dau noi truc tiep duoc dong goi de truyen di.
+
+```
+GATE2
 enable
 conf t
 router eigrp 1
@@ -250,9 +348,11 @@ router eigrp 1
   network 2.0.0.0
   redistributed static
   no autosummary
-  
+```
+
 ## IV. HA
-  
+
+```
    GATE1
   int g0/0
     standby 60 ip 2.2.2.3
@@ -269,7 +369,8 @@ router eigrp 1
     
  show stanby
  show standby brief
- 
+```
+
 ## V. SERVICE
  
 ### 1. DHCP
