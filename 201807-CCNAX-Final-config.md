@@ -218,11 +218,11 @@ trong cau lenh cau hinh bgp:
  network: xac dinh cac network ma router dang cau hinh se quang ba cho cac router neighbor
  redistribute static: cho phep router dang cau hinh quang ba cac route static cho cac router neighbor (ben canh cac network da khai bao trong cau lenh network)
 
-###  eBGP
 
-#### ISP1
 
 ```
+## ISP1
+
 conf t
 
 ip route 4.4.4.0 255.255.255.248 1.1.1.2
@@ -232,12 +232,9 @@ neighbor 3.3.12.2 remote-as 65002
 neighbor 3.3.13.2 remote-as 65003
 redistributed static
 network 1.1.1.0 mask 255.25.255.252
-```
 
+## ISP2
 
-#### ISP2
-
-```
 conf t
 
 ip route 2.2.2.0 255.255.255.128 1.1.1.6
@@ -247,21 +244,18 @@ neighbor 3.3.12.1 remote-as 65001
 neighbor 3.3.23.2 remote-as 65003
 redistributed static
 network 1.1.1.4 mask 255.25.255.252
-```
 
-#### ISP3
 
-```
+## ISP3
+
 conf t
 router bgp 65003
 neighbor 3.3.13.1 remote-as 65001
 neighbor 3.3.23.1 remote-as 65002
 network 8.8.8.0 mask 255.255.255.0
-```
 
-#### verify 
+### verify 
 
-```
 show ip bgp
 show ip bgp summary
 show ip bgp neighbor
@@ -281,11 +275,9 @@ https://lpmazariegos.com/2016/01/21/ospfpassiveinterface/
 ```
 passive interface Vlan 172
 passive interface Vlan 192
-```
 
-#### HQ
+## HQ
 
-```
 conf t
 ip route 0.0.0.0 0.0.0.0 1.1.1.1
 router ospf 1
@@ -297,22 +289,18 @@ passive-interface g0/1
 
 int vlan 1
   ip oppf priority 255
-```
 
-#### MLS
+## MLS
 
-```
 conf t
 router ospf 1
 router-id 2.2.2.2
 network 10.0.1.0 0.0.0.255 area 0
 network 10.0.172.0 0.0.0.255 area 0
 newwork 10.0.192.0 0.0.0.255 area 0
-```
 
-#### verify 
+## verify 
 
-```
 show ip route ospf
 ```
 
