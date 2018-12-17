@@ -363,16 +363,18 @@ router eigrp 1
  
 ### 1. DHCP
  
-  DHCP la giao thuc application hoat dong o layer 7
+- DHCP la giao thuc application hoat dong o layer 7
  
 #### 1.1 DHCP  Qua trinh cap phat IP
  
-  PC gui goi tin DHCP discovery service voi IP dich: 255.255.255.255
+ ```
+ PC gui goi tin DHCP discovery service voi IP dich: 255.255.255.255
    DHCP gui ban tin OFFER cho PC voi 1 IP
    PC gui ban tin chua IP ma DHCP gui cho toi cac may khac trong mang 
   thong qua ban tin co dst IP 255.255.255.255 de dam bao khong co may nao trong mang
   co IP nay.
    Neu khong co may nao trong mang so huu IP nay, PC su dung IP nay de lam IP cho chinh no
+ ```
  
 #### 1.2. DHCP: Qua trinh cap phat ip neu DHCP server nam khac mang voi PC can cap phat:
  
@@ -384,14 +386,16 @@ router eigrp 1
   - Luu y: Bat active = on 
 - Cau hinh o MLS:
 
+```
 enable 
 conf t
 int vlan 192
   ip helper-address 10.0.0.251
 int vlan 172
   ip helper-address 10.0.0.251
+```
 
-Luu y: Cau hinh ip cho int vlan 192 va vlan 172: 10.0.192.254/24 va 10.0.172.254/24
+Luu y: Cau hinh ip cho int vlan 192 va vlan 172: `10.0.192.254/24` va `10.0.172.254/24`
 
 ### 2. Cau hinh NAT/PAT
 
