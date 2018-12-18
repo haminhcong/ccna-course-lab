@@ -472,3 +472,29 @@ tunnel destination 1.1.1.2
 
 ip route 10.0.0.0 255.0.0.0 172.16.1.1
 ```
+
+4. Cau hinh PPP CHAP
+
+
+```
+## BRANCH
+
+username GATE1 password chap@123
+username GATE2 password chap@123
+
+int s0/0/0
+encapsulation ppp
+ppp authentication chap
+
+int s0/0/1
+encapsulation ppp
+ppp authentication chap
+
+GATE1, 2
+
+username BRANCH password chap@123
+
+int s0/0/0
+encapsulation ppp
+ppp authentication chap
+```
