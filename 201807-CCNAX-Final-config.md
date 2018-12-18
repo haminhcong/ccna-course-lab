@@ -399,6 +399,31 @@ Luu y: Cau hinh ip cho int vlan 192 va vlan 172: `10.0.192.254/24` va `10.0.172.
 
 ### 2. Cau hinh NAT/PAT
 
+http://www.keil.com/forum/57938/ip-nat-inside-source-and-ip-nat-outside-source-under/
+
+- The "ip nat inside source" means to inspet an incoming packet originated from an "outside" interface (configured as: ip nat outside) towards an "inside" interface (configured as: ip nat inside) and act accordingly.
+- The "ip nat outside source" means to inspet an outgoing packet originated from an "inside" interface (configured as: ip nat inside) towards an "outside" interface (configured as: ip nat outside) and act accordingly.
+  
+ ```
+conf t
+access-list 1 permit 10.0.192.0 0.0.0.255
+access-list 1 permit 10.0.172.0 0.0.0.255
+ 
+ip nat inside source static 10.0.0.253 4.4.4.1
+ip nat inside source static 10.0.0.252 4.4.4.2
+ip nat inside source list 1 interface g0/0 overload
+
+int g0/0
+ip nat outside
+
+int g0/1
+ip nat inside
+
+int vlan 1
+
+ip nat inside
+
+```
 
 ### 3. Cau hinh Tunnel GRE
 
@@ -422,3 +447,28 @@ ip route 10.0.0.0 255.0.0.0 172.16.1.1
 De cac goi tin tu mang 10.0.0.0/8 di duoc vao mang 2.2.2.0/25 va nguoc lai theo
 cac route tinh, vi 2 mang nay deu la mang noi bo nen neu khong co GRE + routing thi 
 se khong the van chuyen duoc trenmang public
+
+
+Cau hinh chi tiet
+
+```
+## HQ
+
+conf t
+int tunnel0
+ip address 172.16.1.1 255.255.255.0
+tunnel source g0/0
+tunnel destination 1.1.1.6
+
+ip route 2.2.2.0 255.255.255.128 172.16.1.2
+
+## BRANCH
+
+conf t
+int tunnel0
+ip address 172.16.1.2 255.255.255.0
+tunnel source g0/0
+tunnel destination 1.1.1.2
+
+ip route 10.0.0.0 255.0.0.0 172.16.1.1
+```
